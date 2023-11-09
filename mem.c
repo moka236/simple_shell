@@ -1,18 +1,18 @@
 #include "shell.h"
 
 /**
- * ffree - frees a pointer and NULLs the address
- * @fr: address of the pointer to free
+ * free_and_nullify - frees a pointer and sets the address to NULL
+ * @pointer_address: address of the pointer to free
  *
  * Return: 1 if freed, otherwise 0.
  */
-int ffree(void **fr)
+int free_and_nullify(void **pointer_address)
 {
-	if (fr && *fr)
+	if (pointer_address && *pointer_address)
 	{
-		free(*fr);
-		*fr = NULL;
-		return (1);
+		free(*pointer_address);
+		*pointer_address = NULL;
+		return 1;
 	}
-	return (0);
+	return 0;
 }
