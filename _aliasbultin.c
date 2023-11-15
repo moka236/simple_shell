@@ -21,11 +21,11 @@ int unset_alias(infostr_t *infostr, const char *strg)
 	int result = 0;
 	char *equals;
 
-	equals = _strchr(name, '=');
+	equals = _strchr(strg, '=');
 	if (equals != NULL)
 	{
 		*equals = '\0';
-		result = delete_alias(&(infostr->alias), name);
+		result = delete_alias(&(infostr->alias), strg);
 		*equals = '=';
 	}
 	return (result);
@@ -39,10 +39,12 @@ int unset_alias(infostr_t *infostr, const char *strg)
 int set_alias(infostr_t *infostr, const char *str)
 {
 	int result = 0;
-	char equals;
+	char *equals;
 
 	equals = _strchr(str, '=');
-	8equals = '\0';
+	if (equals != NULL)
+	{
+	*equals = '\0';
 	result = set_alias_string(&(infostr->alias), str);
 	*equals = '=';
 }

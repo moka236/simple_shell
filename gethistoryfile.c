@@ -29,13 +29,13 @@ char *getHistoryFile(infostr_t *infostr)
 }
 /**
  * writeHistory - craete a file to an existing file
- * @infoste: parameter struct
+ * @infostr: parameter struct
  * Return: 1 on success else -1
  */
 int writeHistory(infostr_t *infostr)
 {
 	ssize_t fileDescriptor;
-	char *filename = getHistoryFile(info);
+	char *filename = getHistoryFile(infostr);
 	list_t *node = NULL;
 
 	if (!filename)
@@ -61,7 +61,7 @@ int writeHistory(infostr_t *infostr)
  * @infostr: paramenter struct
  * Return: hisCount on success else 0
  */
-int readHistory(infostr_t, *infostr)
+int readHistory(infostr_t *infostr)
 {
 	int i, last = 0, lineCount = 0;
 	ssize_t fileDescriptor, readLength, fileSize = 0;
@@ -91,11 +91,11 @@ int readHistory(infostr_t, *infostr)
 	buffer[fileSize] = '\0';
 
 	if (readLength <= 0)
-		return (free(buffer), 0);
+		return (free(buffer), close(fileDescriptor), 0);
 
 	close(filedescriptor);
 
-	for (i = 0; i <  fileSize; i++)
+	for (i = 0; i < fileSize; i++)
 	{
 		if (buffer[i] == '\n')
 		{
@@ -112,16 +112,16 @@ int readHistory(infostr_t, *infostr)
 	infostr->histCount = lineCount;
 
 	while (infostr->histCount-- >= HISTORY_MAX)
-		deleteNodeatIndex(&(info->history), 0);
+		deleteNodeAtIndex(&(infostr->history), 0);
 
-	renumberHistory(info);
-	return (info->histCount);
+	renumberHistory(infostr);
+	return (infostr->histCount);
 }
 /**
  * buildHistoryList - adds entry to history linked list
  * @infostr: structure contain arguments
  * @buffer: buffer
- * @linecount: history line count
+ * @lineCount: history line count
  * Return: 0 Always success
  */
 int buildHistoryList(infostr_t *infostr, char *buffer, int lineCount)
@@ -129,21 +129,21 @@ int buildHistoryList(infostr_t *infostr, char *buffer, int lineCount)
 	list_t *node = NULL;
 
 	if (infostr->history)
-		node = info->history;
+		node = infostr->history;
 
 	addNodeend(&node, buffer, lineCount);
 
-	if (!info->history)
-		infostr->jistory = node;
+	if (!infostr->history)
+		infostr->history = node;
 
 	return (0);
 }
 /**
- * renumnerHistory - renumbers the history linked list
+ * renumberHistory - renumbers the history linked list
  * @infostr: structure contain arguments
  * Return: new histCount
  */
-int renumberhistory(infostr_t *infostr)
+int renumberHistory(infostr_t *infostr)
 {
 	list_t *node = infostr->history;
 	int i = 0;

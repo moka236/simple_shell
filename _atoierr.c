@@ -13,7 +13,7 @@ int _erratoi(char *t)
 	{
 		result *= 10;
 		result += (t[u] - '0');
-		if (result > INT_MAZ)
+		if (result > INT_MAX)
 			return (-1);
 	}
 	return (result);
@@ -37,7 +37,7 @@ int print_d(int input, int fd)
 		count++;
 	}
 
-	for (i = 10000000000; i > 1 && current != 0; i /= 10)
+	for (i = 1000000000; i > 1 && current != 0; i /= 10)
 	{
 		__putchar('0' + current / i);
 		count++;
@@ -53,9 +53,12 @@ int print_d(int input, int fd)
  * @num: number
  * @base: base
  * @flags: argument
+ * Return: converted number
  */
 char *convert_number(long int num, int base, int flags)
 {
 	static char buffer[BUFFER_SIZE];
 	char *ptr = &buffer[BUFFER_SIZE - 1];
+
+	return (ptr);
 }

@@ -7,7 +7,8 @@
  * @length: address of length var
  * Return: bytes
  */
-ssize_t bufferChainedCommands(infostr_t, char **buffer, size_t *length)
+ssize_t bufferChainedCommands(infostr_t *infostr
+		, char **buffer, size_t *length)
 {
 	ssize_t bytesRead = 0;
 	size_t currentLength = 0;
@@ -19,7 +20,7 @@ ssize_t bufferChainedCommands(infostr_t, char **buffer, size_t *length)
 		signal(SIGINT, interruptHandler);
 
 #if USE_GETLINE
-		bytesRead = geyline(buffer, &currentLength, stdin);
+		bytesRead = getline(buffer, &currentLength, stdin);
 #else
 		bytesRead = customGetline(infostr, buffer, &currentLength);
 #endif
@@ -56,13 +57,13 @@ ssize_t getInput(infostr_t *infostr)
 	ssize_t bytesRead = 0;
 	char **commandPtr = &(infostr->arguments), *currentPtr;
 
-	_putchar(BUFF_FLUSH);
+	_putchar(BUFFER_FLUSH);
 	bytesRead = bufferChainedCommands(infostr, &commandBuffer, &bufferLength);
 
 	if (bytesRead == -1)
 		return (-1);
 
-	if (ufferLength)
+	if (bufferLength)
 	{
 		nextPos = currentPos;
 		currentPtr = commandBuffer + currentPos;
@@ -103,7 +104,7 @@ ssize_t readBuffer(infostr_t *infostr, char *buffer, size_t *position)
 	if (*position)
 		return (0);
 
-	bytesRead = read(infostr->raedFd, buffer, READ_BUFFER_SIZE);
+	bytesRead = read(infostr->readFd, buffer, READ_BUFFER_SIZE);
 
 	if (bytesRead >= 0)
 		*position = bytesRead;
@@ -156,13 +157,13 @@ int customGetline(infostr_t *infostr, char **ptr, size_t *length)
 	return (size);
 }
 /**
- * interrupthandler - blocks ctrl-C
+ * interruptHandler - blocks ctrl-C
  * @sigNum: the signal number
  * Return: void
  */
-void interruptHandler(++attribute__((unused)) int sigNum)
+void interruptHandler(__attribute__((unused)) int sigNum)
 {
 	_puts("\n");
 	_puts("$ ");
-	_putchar(BUF_FLUSH);
+	_putchar(BUFFER_FLUSH);
 }

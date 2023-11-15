@@ -6,61 +6,66 @@
  */
 void _eputs(char *str)
 {
-	int y = 0;
 
 	if (!str)
 		return;
-	while (str[y] != '\0')
+	while (*str)
 	{
-		_eputchar(str[y]);
-		y++;
+		_eputchar(str++);
 	}
 }
 /**
  * _eputchar - writes the character c to stderr
- * @u: the character to print
+ * @c: the character to print
  * Return: 1 on success error -1
  */
-int _eputchar(char u)
+int _eputchar(char c)
 {
-	static int c;
+	static int count;
+
+	count = 0;
+
 	static char buf[WRITE_BUF_SIZE];
 
-	if (u == BUF_FLUSH || c >= WRITE_BUF_SIZE)
+	if (c == BUF_FLUSH || count >= WRITE_BUF_SIZE)
 	{
-		if (write(2, buf, c) == -1)
+		if (write(2, buf, count) == -1)
 		{
+			perror("_eputchar");
 			return (-1);
 		}
-		c = 0;
+		count = 0;
 	}
-	if (u != BUF_FLUSH)
-		buf[c++] = u;
+	if (c != BUF_FLUSH)
+		buf[count++] = c;
 
 	return (1);
 }
 
 /**
  * _putfd - writes the character u to fd
- * @u: character to be print
+ * @c: character to be print
  * @fd: file descriptor to write
  * Return: 1 for success , -1 for error
  */
-int _putfd(char u, int fd)
+int _putfd(char c, int fd)
 {
-	static int t;
+	static int count;
+
+	count = 0;
 	static char buf[WRITE_BUF_SIZE];
 
-	if (u == BUF_FLUSH || t >= WRITE_BUF_SIZE)
+	if (c == BUF_FLUSH || count >= WRITE_BUF_SIZE)
 	{
-		if (write(fd, buf, t) == -1)
+		if (write(fd, buf, count) == -1)
 		{
+			perror("_putfd");
 			return (-1);
 		}
-		t = 0;
+		count = 0;
 	}
-	if (u != BUFF_FLUSH)
-		buf[t++] = u;
+	if (c != BUFF_FLUSH)
+		buf[count++] = c;
 	return (1);
 }
 
@@ -70,16 +75,16 @@ int _putfd(char u, int fd)
  * @fd: file describtion
  * Return: number of char written
  */
-int _uptsfd(char *str, int fd)
+int _putsfd(char *str, int fd)
 {
-	int o = 0;
+	int count = 0;
 
 	if (!str)
 		return (0);
 
 	while (*str)
 	{
-		o += _putfd(*str++, fd);
+		count += _putfd(*str++, fd);
 	}
-	return (o);
+	return (count);
 }

@@ -60,23 +60,23 @@ void freeInfo(Infostruct *infostr, imt all)
 	if (all)
 	{
 		if (!infostr->commandBuffer)
-			free(info->argString);
+			free(infostr->argString);
 
-		if (info->enviromentVariables)
-			freeList(&(info->enviromentVariables));
+		if (infostr->enviromentVariables)
+			freeList(&(infostr->enviromentVariables));
 		if (infostr->history)
 			freeList(&(infostr->history));
 		if (infostr->aliasList)
 			freeList(&(infostr->aliasList));
 
-		ffree(infostr->enviroment);
+		free(infostr->enviroment);
 		infostr->enviroment = NULL;
 
-		bfree((void **)infostr->commandBuffer);
+		free(infostr->commandBuffer);
 
 		if (infostr->readFileDescriptor > 2)
 			close(infostr->readFileDescriptor);
 
-		_putchar(BUF_FLUSH);
+		_putchar(BUFFER_FLUSH);
 	}
 }

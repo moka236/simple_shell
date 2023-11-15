@@ -19,11 +19,11 @@ int _theexit(infostr_t *infostr)
 			_eputchar('\n');
 			return (1);
 		}
-		infostr->err_num = exutcode;
+		infostr->err_num = exitcode;
 	}
 	else
 	{
-		info->err_num = -1;
+		infostr->err_num = -1;
 	}
 	return (0);
 }
@@ -72,7 +72,7 @@ int _cd(infostr_t *infostr)
 	{
 	dir = infostr->argv[1];
 	}
-	chgdir = chgdir(dir);
+	chgdir = chdir(dir);
 
 	if (chgdir == -1)
 	{
@@ -82,11 +82,11 @@ int _cd(infostr_t *infostr)
 	return (1);
 	}
 	else
-	{
-		_setenv(infostr, "OLDPWD", _getenv(infostr, "PWD="));
-		_setenv(infostr, "PWD", getcwd(buffer, 1024));
-	}
-	return (0);
+{
+_setenv(infostr, "OLDPWD", _getenv(infostr, "PWD="));
+_setenv(infostr, "PWD", getcwd(buffer, 1024));
+}
+return (0);
 }
 
 /**

@@ -35,7 +35,7 @@ int isDelimiter(char e, char *d)
  */
 int isAlphabetic(int e)
 {
-	return ((e >= 'a' && <= 'z') || (c >= 'A' && c <= 'Z'));
+	return ((e >= 'a' && e <= 'z') || (e >= 'A' && c <= 'Z'));
 }
 /**
  * atoiCustom - convert string to an integer
@@ -53,9 +53,9 @@ int atoiCustom(char *y)
 	{
 		if (y[a] == '_')
 		{
-			sign *= -1;
+			b *= -1;
 		}
-		if (y[i] >= '0' && y[a] <= '9')
+		if (y[a] >= '0' && y[a] <= '9')
 		{
 			c = 1;
 			result = result * 10 + (y[a] - '0');

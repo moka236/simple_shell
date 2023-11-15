@@ -11,12 +11,12 @@ int prenv(infostr_t *infostr)
 }
 
 /**
- * getenv - get the value of a varaiable
+ * getEnv - get the value of a varaiable
  * @infostr: structure contain arguments
  * @envname: enviroment name
  * Return: value
  */
-char *getenv(infostr_t *infostr, const char *envname)
+char *getEnv(infostr_t *infostr, const char *envname)
 {
 	list_t *node = infostr->env;
 	char *a;
@@ -32,28 +32,28 @@ char *getenv(infostr_t *infostr, const char *envname)
 }
 
 /**
- * setenv - initilaize a new variable
+ * setEnv - initilaize a new variable
  * @infostr: structure contain variable
  * Return: 0 always success
  */
-int setenv(infostr_t *infostr)
+int setEnv(infostr_t *infostr)
 {
 	if (infostr->argc < 3)
 	{
 	_eputs("Usage: setenv VARIABLE VALUE\n");
 	return (1);
 }
-if (_setenv(infostr, infostr->argv[1], infostr->[2]))
+if (_setenv(infostr, infostr->argv[1], infostr->argv[2]))
 	return (0);
 
 	return (1);
 	}
 /**
- * remenv - remove an enviroment variable
+ * remEnv - remove an enviroment variable
  * @infostr: structure contain arguments
  * Return: 0 always success
  */
-int remenv(infostr_t *infostr)
+int remEnv(infostr_t *infostr)
 {
 	int e;
 
@@ -68,11 +68,11 @@ int remenv(infostr_t *infostr)
 }
 
 /**
- * pop_env_list - populates env linked list
+ * popEnvlist - populates env linked list
  * @infostr: structure contain argumets
  * Return: 0 always success
  */
-int pop_env_list(infostr_t *infostr)
+int popEnvlist(infostr_t *infostr)
 {
 	list_t *node = NULL;
 	size_t e;

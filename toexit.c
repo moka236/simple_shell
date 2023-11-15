@@ -29,7 +29,7 @@ char *thestrcy(char *ds, const char *sstr, size_t num)
  * @num: number of bytes
  * Return: string
  */
-char *cstrcat(cjar *ds, const char *sstr, size_t num)
+char *cstrcat(char *ds, const char *sstr, size_t num)
 {
 	char *t = ds;
 

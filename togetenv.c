@@ -7,9 +7,9 @@
  */
 char **getEnv(infostr_t *infostr)
 {
-	if (!info->environ || infostr->envChanged)
+	if (!infostr->environ || infostr->envChanged)
 	{
-		info->environ = listToStrings(infostr->env);
+		infostr->environ = listToStrings(infostr->env);
 		infostr->envChanged = 0;
 	}
 	return (infostr->environ);
@@ -30,11 +30,11 @@ int unSetenv(infostr_t *infostr, char *varble)
 
 	while (node)
 	{
-		char *r = startsWith(node->str, varble);
+		char *r = startsWithSubstring(node->str, varble);
 
 		if (r && *r == '=')
 		{
-			infostr->envChanged = deleteNodeAtIndex(&(infpstr->env), t);
+			infostr->envChanged = deleteNodeAtIndex(&(infostr->env), t);
 			return (infostr->envChanged);
 		}
 		node = node->next;
@@ -54,7 +54,7 @@ int setEnvro(infostr_t *infostr, char *varble, char *v)
 	if (!var || !value)
 		return (1);
 
-	char *buf = createEnvString(varble, value);
+	char *buf = mkEnvstr(v, value);
 
 	if (!buf)
 		return (1);
@@ -63,7 +63,7 @@ int setEnvro(infostr_t *infostr, char *varble, char *v)
 
 	while (node)
 	{
-		char *r = startsWith(node->str, varble);
+		char *r = startsWithiSubstring(node->str, v);
 
 		if (r && *r == '=')
 		{
@@ -75,7 +75,7 @@ int setEnvro(infostr_t *infostr, char *varble, char *v)
 		}
 		node = node->next;
 	}
-	addNodeEnd(&(info->env), buf, 0);
+	addNodeEnd(&(infostr->env), buf, 0);
 	free(buf);
 	infostr->envChanged = 1;
 	return (0);
