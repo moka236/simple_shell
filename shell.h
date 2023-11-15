@@ -1,90 +1,116 @@
 #ifndef SHELL_H
 #define SHELL_H
 
+/*
+ * shell.h - Header file for a simple shell program
+ * Author: Mohamed Emad - Hadeel ahmed 
+ * Date: November 30, 2023
+ */
+
 #include <stddef.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
 #include <signal.h>
 
-/* Macro for buffer flush */
-#define BUF_FLUSH -1
+#define BUFFER_FLUSH '\0'
+#define WRITE_BUFFER_SIZE 1024
+#define READ_BUFFER_SIZE 1024
+#define USE_GETLINE 1
 
-/* Structure for linked list */
+/**
+ * struct list_s - singly linked list
+ * @str: string
+ * @next: points to the next node
+ *
+ * Description: singly linked list node structure
+ */
 typedef struct list_s {
     char *str;
     struct list_s *next;
 } list_t;
 
-/* Enumeration for command buffer types */
-typedef enum {
-    CMD_NORMAL,
-    CMD_AND,
-    CMD_OR,
-    CMD_CHAIN
-} CommandBufferType;
-
-/* Structure for parameter information */
-typedef struct {
+/**
+ * struct InfoStruct - structure to hold shell information
+ * @argString: argument string
+ * @argumentVector: array of arguments
+ * @executablePath: path of the executable
+ * @argumentCount: number of arguments
+ * @programName: name of the program
+ * @commandBuffer: buffer for command input
+ * @LineCountFlag: flag for line count
+ * @historyCount: count of command history
+ * @status: command execution status
+ * @command_buffer_type: type of command buffer
+ * @environmentVariables: environment variable list
+ * @history: command history list
+ * @aliasList: alias list
+ * @environment: environment list
+ * @environ: environment array
+ * @envChanged: flag indicating environment change
+ * @readFileDescriptor: file descriptor for reading
+ */
+typedef struct InfoStruct {
     char *argString;
     char **argumentVector;
     char *executablePath;
+    int argumentCount;
     char *programName;
-    size_t argumentCount;
-    CommandBufferType commandBufferType;
-    list_t *aliasList;
-    list_t *environmentList;
-    int status;
-    int historyCount;
+    char *commandBuffer;
     int LineCountFlag;
+    int historyCount;
+    int status;
+    int command_buffer_type;
+    list_t *environmentVariables;
+    list_t *history;
+    list_t *aliasList;
+    list_t *environment;
+    list_t *environ;
+    int envChanged;
     int readFileDescriptor;
 } InfoStruct;
 
-/* Memory functions */
-void *_memset(void *s, int c, size_t n);
-void _free(void *ptr);
-char *_strdup(const char *s);
-size_t _strlen(const char *s);
-char *_strcpy(char *dest, const char *src);
-char *_strncpy(char *dest, const char *src, size_t n);
-char *_strncat(char *dest, const char *src, size_t n);
-int _strcmp(const char *s1, const char *s2);
+/**
+ * struct info_t - structure to hold shell information
+ * @alias_list: alias list
+ * @environment_list: environment list
+ * @arguments: array of arguments
+ * @status: command execution status
+ * @command_buffer_type: type of command buffer
+ */
+typedef struct info_t {
+    list_t *alias_list;
+    list_t *environment_list;
+    char **arguments;
+    int status;
+    int command_buffer_type;
+} info_t;
 
-/* Linked list functions */
-list_t *addNodeAtStart(list_t **head, const char *str);
-list_t *addNodeAtEnd(list_t **head, const char *str);
-size_t printListStr(const list_t *head);
-int deleteNodeAtIndex(list_t **head, unsigned int index);
-void freeList(list_t **head);
+/* Function prototypes */
 
-/* String manipulation functions */
-char *thestrcy(char *dest, const char *src, size_t num);
-char *cstrcat(char *dest, const char *src, size_t num);
-char *locstrc(char *s, char c);
+int calculateLength(char *str);
+int compareStrings(char *string1, char *string2);
+char *startsWithSubstring(const char *haystack, const char *needle);
+char *concatenateStrings(char *destination, char *source);
 
-/* Environment functions */
-char **getEnv(InfoStruct *info);
-int unsetEnv(InfoStruct *info, char *variable);
-int setEnv(InfoStruct *info, char *variable, char *value);
-char *mkEnvstr(char *variable, char *value);
+char *copyString(char *dest, char *src);
+char *duplicateString(const char *str);
+void displayString(char *str);
+int outputCharacter(char ch);
 
-/* InfoStruct functions */
-void initInfo(InfoStruct *info);
-void setInfo(InfoStruct *info, char **arguments);
-void freeInfo(InfoStruct *info, int all);
-
-/* Input functions */
-ssize_t bufferChainedCommands(InfoStruct *info, char **buffer, size_t *length);
-ssize_t getInput(InfoStruct *info);
-ssize_t readBuffer(InfoStruct *info, char *buffer, size_t *position);
-int customGetline(InfoStruct *info, char **ptr, size_t *length);
+void initInfo(InfoStruct *infostr);
+void setInfo(InfoStruct *infostr, char **arguments);
+void freeInfo(InfoStruct *infostr, int all);
+ssize_t bufferChainedCommands(infostr_t *infostr, char **buffer, size_t *length);
+ssize_t getInput(infostr_t *infostr);
+ssize_t readBuffer(infostr_t *infostr, char *buffer, size_t *position);
+int customGetline(infostr_t *infostr, char **ptr, size_t *length);
 void interruptHandler(int sigNum);
 
-/* Command chaining functions */
-int isChainDelimiter(InfoStruct *info, char *buffer, size_t *position);
-void checkChainContinue(InfoStruct *info, char *buffer, size_t *position, size_t start_position, size_t length);
-int replaceAlias(InfoStruct *info);
-int replaceVariables(InfoStruct *info);
-int replaceString(char **old, char *new);
+int is_chain_delimiter(info_t *info, char *buffer, size_t *position);
+void check_chain_continue(info_t *info, char *buffer, size_t *position, size_t start_position, size_t length);
+int replace_alias(info_t *info);
+int replace_variables(info_t *info);
+int replace_string(char **old, char *new);
 
 #endif /* SHELL_H */
